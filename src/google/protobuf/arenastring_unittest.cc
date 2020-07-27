@@ -76,7 +76,17 @@ TEST(ArenaStringPtrTest, ArenaStringPtrOnHeap) {
   *mut = "Test long long long long value";  // ensure string allocates storage
   EXPECT_EQ(std::string("Test long long long long value"), field2.Get());
   field2.Destroy(&default_value, NULL);
+
+
+  ArenaStringPtr field3;
+  field3.UnsafeSetDefault(&default_value);
+  field3.Set(&default_value, WrapString("test long long long long long value"), nullptr);
+  std::string* r = field3.Release(&default_value, nullptr);
+  delete r;
+  EXPECT_EQ(std::string("default"), field3.Get());
+  field3.Destroy(&default_value, NULL);
 }
+
 
 TEST(ArenaStringPtrTest, ArenaStringPtrOnArena) {
   Arena arena;
@@ -102,6 +112,15 @@ TEST(ArenaStringPtrTest, ArenaStringPtrOnArena) {
   *mut = "Test long long long long value";  // ensure string allocates storage
   EXPECT_EQ(std::string("Test long long long long value"), field2.Get());
   field2.Destroy(&default_value, &arena);
+
+
+  ArenaStringPtr field3;
+  field3.UnsafeSetDefault(&default_value);
+  field3.Set(&default_value, WrapString("test long long long long long value"), &arena);
+  std::string* r = field3.Release(&default_value, &arena);
+  delete r;
+  EXPECT_EQ(std::string("default"), field3.Get());
+  field3.Destroy(&default_value, &arena);
 }
 
 TEST(ArenaStringPtrTest, ArenaStringPtrOnArenaNoSSO) {

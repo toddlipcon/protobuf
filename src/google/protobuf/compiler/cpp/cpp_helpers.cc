@@ -1476,6 +1476,7 @@ class ParseLoopGenerator {
         field->default_value_string().empty() &&
         !IsStringInlined(field, options_) && !field->real_containing_oneof() &&
         ctype == FieldOptions::STRING) {
+      // TODO(todd) put arena parsing code here
       GenerateArenaString(field);
     } else {
       std::string name;
